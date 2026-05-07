@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - LearnSpark</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        *{
+            margin: 0; padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            background-color: #0f1412;;
+            color: white;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        #navbar{
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(15, 20, 18, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(74, 222, 128, 0.15);
+            height: 68px;
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            justify-content: space-between;
+            transition: box-shadow 0.2s;
+        }
+        #navbar.scrolled{
+            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+        }
+        .navlogo{
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-weight: 800;
+            font-size: 32px;
+            color: #4ade80;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .navlogo span{ 
+            color: #f8be2a; 
+        }
+
+        .navlinks{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+        }
+        .navlinks a{
+            text-decoration: none;
+            color: #8aa89a;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 8px;
+            transition: color 0.2s, background 0.2s;
+        }
+        .navlinks a:hover, .navlinks a.active{
+            color: #4ade80;
+            background: rgba(74,222,128,0.08);
+        }
+        .navdrop{
+            position: relative;
+        }
+        .navdrop > a{ 
+            display: flex; 
+            align-items: center; 
+            gap: 5px; 
+        }
+        .navdrop > a::after{
+            content: '\f107';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 11px;
+            transition: transform 0.2s;
+        }
+        .navdrop:hover > a::after{ 
+            transform: rotate(180deg); 
+        }
+        .dropdownmenu{
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #1a2420;
+            border: 1px solid rgba(74, 222, 128, 0.15);
+            border-radius: 10px;
+            padding: 8px;
+            min-width: 190px;
+            display: none;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        }
+        .navdrop:hover .dropdownmenu{
+            display: block; 
+        }
+        .dropdownmenu a{
+            display: block;
+            padding: 9px 12px;
+            border-radius: 7px;
+            color: #8aa89a;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        .dropdownmenu a:hover{
+            color: #4ade80;
+            background: rgba(74,222,128,0.08);
+        }
+
+        .navgets{
+            background: #4ade80 !important;
+            color: #0f1412 !important;
+            font-weight: 600 !important;
+            padding: 9px 20px !important;
+        }
+        .navgets:hover{
+            background: #22c55e !important;
+            color: #0f1412 !important;
+        }
+        #sidebar{
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            flex-direction: column;
+            gap: 5px;
+        }
+        #sidebar span{
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+        #sidemenu{
+            position: fixed;
+            top: 0; right: -280px;
+            width: 280px;
+            height: 100vh;
+            background: #1a2420;
+            border-left: 1px solid rgba(74, 222, 128, 0.15);
+            z-index: 1100;
+            padding: 80px 30px 40px;
+            transition: right 0.35s;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+        }
+        #sidemenu.open{ 
+            right: 0; 
+        }
+        #sidemenu a{
+            text-decoration: none;
+            color: #8aa89a;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+        #sidemenu a:hover{
+            color: #4ade80;
+            background: rgba(74,222,128,0.08);
+            border-color: rgba(74, 222, 128, 0.15);
+        }
+        #sidemenu .sidedivider{
+            height: 3px;
+            background: rgba(222, 192, 74, 0.15);
+            margin: 10px 0;
+        }
+        #sidemenu .sidegets{
+            background: #4ade80;
+            color: #0f1412 !important;
+            font-weight: 600 !important;
+            text-align: center;
+            margin-top: 10px;
+        }
+        #sidemenu .sidelabel{
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #8aa89a;
+            padding: 6px 16px 2px;
+            font-weight: 600;
+        }
+        #overlay{
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.578);
+            z-index: 1050;
+        }
+        #overlay.visible{ 
+            display: block; 
+        }
+        #closeMenu{
+            position: absolute;
+            top: 22px; right: 22px;
+            background: none;
+            border: none;
+            color: #8aa89a;
+            font-size: 22px;
+            cursor: pointer;
+        }
+        #closeMenu:hover{ 
+            color: #4ade80; 
+        }
+        .pageheader{
+            padding:70px 40px 50px;
+            text-align:center;
+            background:
+            radial-gradient(circle at top left, #1a3a2a, transparent 40%),
+            radial-gradient(circle at top right, #00ff9c33, transparent 40%),
+            radial-gradient(circle at bottom left, #0d2016, transparent 60%),
+            radial-gradient(circle at bottom right, #1f6f4a, transparent 70%),
+            #08150f;
+            border-bottom:1px solid rgba(74,222,128,0.15);
+        }
+        .pageheader .tag{
+            display:inline-block;
+            font-size:12px;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:2px;
+            color:#4ade80;
+            background:rgba(74,222,128,0.1);
+            border:1px solid rgba(74,222,128,0.2);
+            padding:5px 14px;
+            border-radius:100px;
+            margin-bottom:18px;
+        }
+        .pageheader h1{
+            font-family:sans-serif;
+            font-size:45px;
+            font-weight:800;
+            letter-spacing:1.5px;
+            margin-bottom:14px;
+        }
+        .pageheader p{
+            font-size:16px;
+            color:#8aa89a;
+            max-width:460px;
+            margin:0 auto;
+        }
+        .contact{
+            max-width:1100px;
+            margin:0 auto;
+            padding:70px 40px;
+            display:grid;
+            grid-template-columns:1fr 1.6fr;
+            gap:50px;
+            align-items:start;
+        }
+        .contactinfo h2{
+            font-family:'Syne',sans-serif;
+            font-size:24px;
+            font-weight:800;
+            margin-bottom:20px;
+            letter-spacing:-0.5px;
+        }
+        .contactinfo p{
+            font-size:15px;
+            color:#8aa89a;
+            line-height:1.7;
+            margin-bottom:28px;
+        }
+        .infoitem{
+            display:flex;
+            align-items:flex-start;
+            gap:14px;
+            margin-bottom:22px;
+        }
+        .infoicon{
+            width:40px;
+            height:40px;
+            min-width:40px;
+            border-radius:10px;
+            background:rgba(74,222,128,0.1);
+            border:1px solid rgba(74,222,128,0.15);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:#4ade80;
+            font-size:16px;
+        }
+        .infocontent .label{
+            font-size:12px;
+            text-transform:uppercase;
+            letter-spacing:1.5px;
+            color:#8aa89a;
+            font-weight:700;
+            margin-bottom:3px;
+        }
+        .infocontent .value{
+            font-size:15px;
+            color:white;
+        }
+        .socialrow{
+            display:flex;
+            gap:10px;
+            margin-top:30px;
+        }
+        .socialrow a{
+            width:38px;
+            height:38px;
+            border-radius:9px;
+            border:1px solid rgba(74,222,128,0.15);
+            background:#1e2b27;
+            color:#8aa89a;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:14px;
+            text-decoration:none;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .socialrow a:hover{
+            color:#4ade80;
+            border-color:#4ade80;
+        }
+        .contactform{
+            background:#1e2b27;
+            border:1px solid rgba(74,222,128,0.15);
+            border-radius:18px;
+            padding:36px;
+        }
+        .contactform h2{
+            font-family:sans-serif;
+            font-size:35px;
+            font-weight:800;
+            margin-bottom:24px;
+        }
+        .formrow{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:16px;
+        }
+        .formgroup{
+            margin-bottom:18px;
+        }
+        .formgroup label{
+            display:block;
+            font-size:13px;
+            font-weight:600;
+            color:#8aa89a;
+            margin-bottom:7px;
+            letter-spacing:0.3px;
+        }
+        .formgroup input, .formgroup textarea, .formgroup select{
+            width:100%; 
+            padding:12px 14px;
+            background:#1a2420;
+            border:1px solid rgba(74,222,128,0.15);
+            border-radius:9px; 
+            color:white;
+            font-size:15px; 
+            font-family:'DM Sans',sans-serif;
+            outline:none; 
+            transition:border-color 0.2s,background 0.2s;
+        }
+        .formgroup input::placeholder,.formgroup textarea::placeholder{
+            color:#8aa89a;
+        }
+        .formgroup input:focus,.formgroup textarea:focus,.formgroup select:focus{
+            border-color:#4ade80;
+            background:#151c19;
+        }
+        .formgroup select option{
+            background:#1a2420;
+            color:white;
+        }
+        .formgroup textarea{
+            resize:vertical;
+            min-height:120px;
+        }
+        .submitbtn{
+            width:100%;
+            padding:14px;
+            background:#4ade80;
+            color:#0f1412;
+            border:none;
+            border-radius:10px;
+            font-size:16px;
+            font-weight:700;
+            font-family:'DM Sans',sans-serif;
+            cursor:pointer;
+            transition:background 0.2s,transform 0.2s;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:8px;
+        }
+        .submitbtn:hover{
+            background:#22c55e;
+            transform:translateY(-2px);
+        }
+        #successMsg{
+            display:none;
+            margin-top:18px;
+            background:rgba(74,222,128,0.1);
+            border:1px solid rgba(74,222,128,0.3);
+            border-radius:10px;
+            padding:14px 18px;
+            color:#4ade80;
+            font-size:14px;
+            font-weight:500;
+            text-align:center;
+        }
+        #footer{
+            background: #0b0f0d;
+            border-top: 1px solid rgba(74, 222, 128, 0.15);
+            padding: 60px 40px 30px;
+        }
+        .footerinner{
+            max-width: 1200px;
+            margin: 0 auto; 
+        }
+        .footertop{
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(74, 222, 128, 0.15);
+        }
+        .footerlogo{
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-weight: 800;
+            font-size: 30px;
+            color: #4ade80;
+            text-decoration: none;
+        }
+        .footerlogo span{ 
+            color: #f8be2a; 
+        }
+        .footerbrand p{
+            font-size: 18px;
+            color: #6cba96;
+            line-height: 1.7;
+            margin-top: 10px;
+            max-width: 260px;
+        }
+        .footercol h4{
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #8aa89a;
+            margin-bottom: 16px;
+        }
+        .footercol ul{ 
+            list-style: none; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+        }
+        .footercol ul li a{
+            text-decoration: none;
+            color: #8aa89a;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        .footercol ul li a:hover{ 
+            color: #4ade80; 
+        }
+        .footerbottom{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 28px;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+        .footerbottom p{ 
+            font-size: 13px; 
+            color: #8aa89a; 
+        }
+        .sociallinks{ 
+            display: flex; gap: 10px; 
+        }
+        .sociallinks a{
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            border: 1px solid rgba(74, 222, 128, 0.15);
+            background: #1e2b27;
+            color: #8aa89a;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .sociallinks a:hover{ 
+            color: #4ade80; 
+            border-color: #4ade80; 
+        }
+        @media (max-width: 1024px){
+            .footertop{
+                grid-template-columns: 1fr 1fr; 
+            }
+        }
+        @media(max-width:1024px){
+            .footertop{
+                grid-template-columns:1fr 1fr;
+            }}
+        @media(max-width:768px){
+            #navbar{
+                padding:0 20px;
+            }
+            .navlinks, .navgets{
+                display:none;
+            }
+            #sidebar{
+                display:flex;
+            }
+            .pageheader{
+                padding:50px 20px 36px;
+            }
+            .contact{
+                grid-template-columns:1fr;
+                padding:50px 20px;
+                gap:36px;
+            }
+            .formrow{
+                grid-template-columns:1fr;
+            }
+            .footertop{
+                grid-template-columns:1fr;gap:28px;
+            }
+            .footerbottom{
+                flex-direction:column;text-align:center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar">
+        <a href="index.html" class="navlogo">Learn<span>Spark</span></a>
+        <ul class="navlinks">
+            <li><a href="index.html">Home</a></li>
+            <li class="navdrop">
+                <a href="About.html">About</a>
+                <div class="dropdownmenu">
+                    <a href="About.html">About LearnSpark</a>
+                    <a href="Terms.html">Terms & Conditions</a>
+                </div>
+            </li>
+            <li class="navdrop">
+                <a href="Courses.html">Courses</a>
+                <div class="dropdownmenu">
+                    <a href="Courses.html">Web Development</a>
+                    <a href="Courses.html">App Development</a>
+                    <a href="Courses.html">UI/UX Design</a>
+                    <a href="Courses.html">Cloud Computing</a>
+                    <a href="Courses.html">C / C++</a>
+                    <a href="Courses.html">AI / ML</a>
+                    <a href="Courses.html">View All Courses →</a>
+                </div>
+            </li>
+            <li><a href="Contact.html" class="active">Contact</a></li>
+            <li><a href="Courses.html" class="navgets">Get Started</a></li>
+        </ul>
+        <button id="sidebar">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+    <div id="overlay"></div>
+    <div id="sidemenu">
+        <button id="closeMenu" title="close menu"><i class="fa-solid fa-xmark"></i></button>
+        <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="About.html"><i class="fa-solid fa-circle-info"></i> About LearnSpark</a>
+        <a href="Terms.html"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</a>
+        <div class="sidedivider"></div>
+        <span class="sidelabel">Courses</span>
+        <a href="#">Web Development</a>
+        <a href="#">App Development</a>
+        <a href="#">UI/UX Design</a>
+        <a href="#">Cloud Computing</a>
+        <a href="#">AI/ML Utilities</a>
+        <a href="Courses.html">View All <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        <div class="sidedivider"></div>
+        <a href="Contact.html"><i class="fa-solid fa-phone"></i> Contact Us</a>
+        <a href="Courses.html" class="sidegets"><i class="fa-solid fa-right-to-bracket"></i> Get Started</a>
+    </div>
+    <div class="pageheader">
+        <span class="tag">Get in Touch</span>
+        <h1>Contact <span style="color:#4ade80;">Us</span></h1>
+        <p>Need help? Reach us out anytime!</p>
+    </div>
+
+    <div class="contact">
+        <div class="contactinfo">
+            <h2>LearnSpark Head Office</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing. Lorem, ipsum. You may submit an e-ticket below for support.</p>
+            <div class="infoitem">
+                <div class="infoicon"><i class="fa-solid fa-phone"></i></div>
+                <div class="infocontent"><div class="label">Phone</div><div class="value">+91 1234567890</div></div>
+            </div>
+            <div class="infoitem">
+                <div class="infoicon"><i class="fa-solid fa-envelope"></i></div>
+                <div class="infocontent"><div class="label">Email</div><div class="value">learnspark@xyz.com</div></div>
+            </div>
+            <div class="infoitem">
+                <div class="infoicon"><i class="fa-solid fa-location-dot"></i></div>
+                <div class="infocontent"><div class="label">Address</div><div class="value">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div></div>
+            </div>
+            <div class="infoitem">
+                <div class="infoicon"><i class="fa-solid fa-clock"></i></div>
+                <div class="infocontent"><div class="label">Working Hours</div><div class="value">Mon – Sat, 8:00 AM – 9:00 PM</div></div>
+            </div>
+            <div class="socialrow">
+                <a href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" title="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        <div class="contactform">
+            <h2>Submit a Support Ticket</h2>
+            <form id="contactForm">
+                <div class="formrow">
+                    <div class="formgroup">
+                        <label for="fname">Full Name *</label>
+                        <input type="text" id="fname" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="formgroup">
+                        <label for="phone">Contact Number *</label>
+                        <input type="tel" id="phone" placeholder="Enter your contact number" required>
+                    </div>
+                </div>
+                <div class="formgroup">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" placeholder="you@example.com" required>
+                </div>
+                <div class="formgroup">
+                    <label for="course">Course (optional)</label>
+                    <select id="course">
+                        <option value="">-- Select a course --</option>
+                        <option>Web Development</option>
+                        <option>App Development</option>
+                        <option>UI/UX Design</option>
+                        <option>Python</option>
+                        <option>C / C++</option>
+                        <option>Java</option>
+                        <option>AI & Machine Learning</option>
+                        <option>Cloud Computing</option>
+                        <option>Cyber Security</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="formgroup">
+                    <label for="issue">Describe Your Issue *</label>
+                    <textarea id="issue" placeholder="Please explain what you need help with" required></textarea>
+                </div>
+                <button type="submit" class="submitbtn"><i class="fa-solid fa-paper-plane"></i> Submit</button>
+                <div id="successMsg">Your issue has been sent! We'll get back to you within 24 hours.</div>
+            </form>
+        </div>
+    </div>
+    <div id="footer">
+    <div class="footerinner">
+        <div class="footertop">
+            <div class="footerbrand">
+                <a href="index.html" class="footerlogo" style="font-size:24px;">Learn<span>Spark</span></a>
+                <p>Level up your tech skills.</p>
+            </div>
+            <div class="footercol">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="About.html">About Us</a></li>
+                    <li><a href="Courses.html">All Courses</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footercol">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="Contact.html">Contact Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="Terms.html">Terms of Use</a></li>
+                </ul>
+            </div>
+            <div class="footercol">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="mailto:learnspark@xyz.com">learnspark@xyz.com</a></li>
+                    <li><a href="tel:+911234567890">+91 1234567890</a></li>
+                    <li><a href="Contact.html">Submit E-Ticket</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footerbottom">
+            <p>© 2026 LearnSpark. All rights reserved. Made by <b>Akshat Joshi</b></p>
+            <div class="sociallinks">
+                <a href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" title="X"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        const navbar = document.getElementById('navbar')
+        window.addEventListener('scroll', function(){ 
+            navbar.classList.toggle('scrolled', window.scrollY > 50)
+        })
+        const sidebar = document.getElementById('sidebar')
+        const sidemenu = document.getElementById('sidemenu')
+        const overlay = document.getElementById('overlay')
+        const closeMenu = document.getElementById('closeMenu')
+        function openSidebar(){ 
+            sidemenu.classList.add('open') 
+            overlay.classList.add('visible')
+            sidebar.classList.add('open')
+            document.body.style.overflow='hidden'
+        }
+        function closeSidebar(){ 
+            sidemenu.classList.remove('open')
+            overlay.classList.remove('visible')
+            sidebar.classList.remove('open')
+            document.body.style.overflow=''
+        }
+        sidebar.addEventListener('click', function(){ 
+            sidemenu.classList.contains('open') ? closeSidebar() : openSidebar()
+        })
+        closeMenu.addEventListener('click', closeSidebar)
+        overlay.addEventListener('click', closeSidebar)
+        document.addEventListener('keydown', function(e){ 
+            if (e.key==='Escape') closeSidebar(); 
+        })
+        document.getElementById('contactForm').addEventListener('submit', function(e){
+            e.preventDefault()
+            var successMsg = document.getElementById('successMsg')
+            successMsg.style.display = 'block'
+            this.reset()
+            setTimeout(function() { successMsg.style.display = 'none'; }, 5000)
+        })
+    </script>
+</body>
+</html>
